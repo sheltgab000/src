@@ -1,0 +1,81 @@
+#Header {
+    width: 100%;
+    height: 150px;
+    background-color: rgba(18, 29, 43, 0.93);
+    padding-top: 35px;
+}
+
+
+
+
+#SearchCriteria {
+    padding: 10px;
+}
+
+
+
+#StudentTable {
+    overflow-y: scroll;
+    width: 575px;
+    height: 300px;
+    padding: 5px;
+    border: 1px solid black;
+    float: left;
+    margin-left: 10px;
+
+}
+
+#StudentInfo {
+    width: 250px;
+    float: left;
+    margin-left: 10px;
+    border: 1px solid black;
+ }
+
+#AmountInfo {
+
+    float:left;
+}
+
+
+
+a {
+    float: left;
+    font-size: 23px
+}
+
+table, th, tr {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#navBar{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #98812f;
+}
+
+li a {
+    float:left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color:rgba(18, 29, 43, 0.93);
+    text-decoration: none;
+    color:white;
+    cursor: pointer;
+}
+
+body{
+    height:100%;
+	
+    background: linear-gradient(to right,#ffde77, black);
+}

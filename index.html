@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%; width:100%">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="Bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+
+    <script>
+        function signIn(){
+            var Username = document.getElementById("txtEmail");
+            var Password = document.getElementById("txtPassword");
+
+            var UName = Username.value;
+            var Pass = Password.value;
+
+            console.log("Username: " + UName + " Password: " + Pass);
+
+            //password and name will be pulled from database and checked
+            if(UName == "Jane Doe"){
+                if(Pass == "password"){
+
+                    window.location = "TeacherPage.html";
+                }
+                else{
+                    alert("password not valid");
+                }
+            }
+			else if(UName == "Bob"){
+                if(Pass == "1234"){
+
+                    window.location = "StudentPage.html";
+                }
+                else{
+                    alert("password not valid");
+                }
+            }
+            else{
+                alert("Name is not found");
+            }
+
+        }
+    </script>
+
+</head>
+<body>
+<p>Test</p>
+    <div id="Header" style="width:100%;">
+        <div class="row">
+            
+            <div class="col-md-2 col-xs-3"> <img src="warren_header.png" alt="Image No load" style="width: 200px; height: 75px"> </div>
+            <div class="col-md-3 col-xs-4"> <img src="warren_title.png" alt="Image No load" style="width: 250px; height: 75px"> </div>
+        
+            <div class="col-md-6"> <img src="core_cash_coin.jpg" alt="Core Bank" style=" width: 250px; height: 75px; margin-left: auto; margin-right: auto;"> </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4"> </div>
+        <div class="col-md-1">
+            <fieldset>
+    <div class="row">
+        <div class="col-md-5 col-xs-5"> </div>
+        <div class="col-md-7"> <h3 style="margin: auto">Sign In</h3> </div>
+        </div>
+
+        <label for="txtEmail">Email:</label>
+        <input type="text" id="txtEmail"/>
+
+        <label for="txtPassword">Password:</label>
+        <input type="password" id="txtPassword"/>
+        <br>
+        <div class="row">
+            <div class="col-md-8 col-xs-8"> </div>
+            <div class="col-md-4"> <input type="button" id="loginButton" onclick="signIn()" value="Login"></input> </div>
+            </div>
+        </fieldset>
+    </div>
+    
+    </div>
+
+</body>
+</html>

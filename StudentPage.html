@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>Student.HTML</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "css/StudentPage.css" />
+
+
+    <link href="Bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <script>
+        function LogOut(){
+            window.location = "index.html";
+        }
+
+        //use this function after giving core cash
+        function AddHistory(){
+            var table = document.getElementById("history");
+            var NewRow = table.insertRow(1);
+            var cell1 = NewRow.insertCell(0);
+            var cell2 = NewRow.insertCell(1);
+            var cell3 = NewRow.insertCell(2);
+            //change to variables
+            cell1.innerHTML = "date"
+            cell2.innerHTML = "teacher"
+            cell3.innerHTML = "reason"
+        }
+    </script>
+
+</head>
+
+<body>
+<form action = "">
+    <div id="Header">
+        <div class="row">
+            <div class="col-md-2 col-xs-3"> <img src="warren_header.png" alt="Image No load" style="width: 200px; height: 75px"> </div>
+            <div class="col-md-3 col-xs-4"> <img src="warren_title.png" alt="Image No load" style="width: 250px; height: 75px"> </div>
+            <img src="core_cash_coin.jpg" alt="Core Bank" style=" width: 250px; height: 75px; margin-left: auto; margin-right: auto;">
+        </div>
+        
+    </div>
+
+<ul id="navBar">
+    <li><a onclick="LogOut()">Log Out</a></li>
+</ul>
+
+<div class="row">
+    <div class="col-md-3 col-xs-3">
+    <div id="info">
+        Current Balance: <label id="balance"> 0000 </label>
+        <br><br>
+        Amount Spent: <label id="Spent"> 0000 </label>
+        <br><br>
+        Total Earned: <label id="total"> 0000 </label>
+        </div>
+    </div>
+        <div id="table" >
+            <table id="history" >
+                <caption style="color:black;"><b>History</b></caption>
+                <tr>
+                    <th>Date</th>
+                    <th>Teacher</th>
+                    <th>Reason</th>
+                </tr>
+                <tr>
+                    <td>Oct 11</td>
+                    <td>mr law</td>
+                    <td>Civility</td>
+                </tr>
+            </table>
+        </div>
+        </div>
+    
+    
+</form>
+</body>
+</html>
