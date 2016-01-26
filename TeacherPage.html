@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="Bootstrap/bootstrap.min.css" >
+    <link rel="stylesheet" type = "text/css" href="css/TeacherPage.css" >
+
+    <title>Teacher</title>
+
+    <script src="js/TableHelper.js"></script>
+
+    <script>
+
+        var students = [];
+        var awarding = true;
+        var currentStudent;
+        var consoleOpen = false;
+
+        loadStudents();
+        updateAmount();
+
+        //adds a student to
+        function addStudent(name, grade, balance){
+            var newStudent = {name: name, grade: grade, balance: balance};
+            students.push(newStudent);
+        }
+
+        /*
+         * This function adds rows of students from the students array to the teachers table
+         * Initially it will clear all nodes(rows) from the table
+         * It then builds a new header row which dynamically changes for maximum readability
+         * It loops through the students array and first checks that the student fits the search criteria
+         * Afterwards it builds each students row using functions from the TableHelper.js file
+         * The loop will add an event listener to the <tr> element that will:
+         *  -Set that student to the current student
+         *  -Then it will need to clear all <tr> backgrounds to white so a previously selected row is cleared
+         *  -finally it sets that row to a color showing it is selected
+         * Then outside the click listener it will append the row to the table
+         */
+        function loadTable() {
+
+            clearChildNodes("Table");
+            document.getElementById("Table").appendChild(createHeaderRow(["Name", "Grade", "Balance"]));
+
+            for (i = 0; i < students.length; i++) {
+                if (checkCriteria(students[i])) {
+                    //build row
+                    var row = createTableRow();
+                    row.appendChild(createTableData(students[i].name, true));
+                    row.appendChild(createTableData(students[i].grade, true));
+                    row.appendChild(createTableData(students[i].balance, true));
+                    row.id = "row" + i;
+
+                    //Event Listener
+                    row.addEventListener("click", function () {
+                        var indexClicked = parseInt(this.id.substr(3));
+                        currentStudent = students[this.id.charAt(3)];
+                        updateStudentInfo();
+                        var nodes = document.getElementById("Table").childNodes;
+                        console.log(nodes.length);
+                        for(k = 0; k < nodes.length; k++){
+
+                            if(nodes[k].innerHTML.charAt(2) != "h");
+                                nodes[k].style.backgroundColor = "white";
+                        }
+
+
+                        this.style.backgroundColor = "blue";
+                    });
+
+                    document.getElementById("Table").appendChild(row);
+                }
+            }
+        }
+
+        /*
+         * This function checks the search criteria inputed by the user
+         */
+        function checkCriteria(student) {
+            var name = document.getElementById("txtSearch").value;
+            var grade;
+
+            //radio buttons
+            if (document.getElementById("GradeAll").checked) {
+                grade = 0;
+            }
+            else if (document.getElementById("Grade5").checked) {
+                grade = 5;
+            }
+            else if (document.getElementById("Grade6").checked) {
+                grade = 6;
+            }
+            else if (document.getElementById("Grade7").checked) {
+                grade = 7;
+            }
+            else if (document.getElementById("Grade8").checked) {
+                grade = 8;
+            }
+
+            if (grade != 0) {
+                if (student.grade == grade && student.name.indexOf(name) != -1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else{
+                if(student.name.indexOf(name) != -1){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+
+        function loadStudents(){
+            addStudent("Bob", 7, 11);
+            addStudent("Susy", 8, 11);
+            addStudent("Joe", 5, 1);
+            addStudent("Tyree", 6, -18000000000000);
+
+            //loadTable();
+        }
+
+        //When add corecash is hit
+        function awardCoreCash(){
+            if(currentStudent != null){
+                currentStudent.balance += 1;
+            }
+            loadTable();
+            updateStudentInfo();
+            currentStudent = null;
+        }
+
+        //when redeem core cash is hit
+        function redeemCoreCash(){
+            if(currentStudent != null){
+                currentStudent.balance -= document.getElementById("txtAmount").value;
+            }
+            loadTable();
+            updateStudentInfo();
+            currentStudent = null;
+        }
+
+        //adds a button to add core cash or adds redeem info
+        function updateAmount(){
+            var division = document.getElementById("AmountInfo");
+            clearChildNodes("AmountInfo");
+            if(awarding){
+                var button = document.createElement("input");
+                button.type = "button";
+                button.value = "Add One CORE Cash";
+                button.style.marginLeft = "200px";
+                button.addEventListener("click", awardCoreCash);
+                division.appendChild(button);
+            }
+            else{
+                var label = document.createElement("label");
+                var input = document.createElement("input");
+                var button = document.createElement("input");
+
+                label.htmlFor = "txtAmount";
+                label.innerHTML = "Amount To Redeem: "
+                input.id = "txtAmount";
+                button.type = "button";
+                button.value = "Redeem"
+                button.addEventListener("click", redeemCoreCash)
+
+                division.appendChild(label);
+                division.appendChild(input);
+                division.appendChild(button);
+            }
+            loadTable();
+        }
+
+        //updates the student info panel based on the latest info
+        function updateStudentInfo(){
+            if(currentStudent != null) {
+                document.getElementById("StudentName").innerHTML = "Name: " + currentStudent.name;
+                document.getElementById("StudentGrade").innerHTML = "Grade: " + currentStudent.grade;
+                document.getElementById("StudentBalance").innerHTML = "Balance: " + currentStudent.balance;
+            }
+            else{
+                document.getElementById("StudentName").innerHTML = "Name: ";
+                document.getElementById("StudentGrade").innerHTML = "Grade: ";
+                document.getElementById("StudentBalance").innerHTML = "Balance:";
+            }
+        }
+
+        function logOutClicked(){
+            window.location = "index.html";
+        }
+
+        function awardClicked(){
+            awarding = true;
+            updateAmount();
+        }
+
+        function redeemClicked(){
+            awarding = false;
+            updateAmount();
+        }
+
+        function keyPressed(event){
+            if(consoleOpen){
+                if (event.keyCode == 192) {
+                    document.getElementById("Header").removeChild(document.getElementById("console"));
+                    consoleOpen = false;
+                }
+                else if(event.keyCode == 13){
+                    var command = document.getElementById("console").value;
+                    var studentName = command.substring(0, command.indexOf("."));
+                    var action = command.substr(command.indexOf(".") + 1, command.indexOf("="));
+                    var amount = command.substr(command.indexOf(" ") + 1, command.length);
+                    console.log("Studnet Name: " + studentName + " Action: " + action + " Amount: " + amount);
+                }
+            }
+            else {
+                if (event.keyCode == 192) {
+                    var input = document.createElement("input");
+                    input.id = "console";
+                    document.getElementById("Header").appendChild(input);
+                    consoleOpen = true;
+                }
+            }
+        }
+
+    </script>
+
+</head>
+<body onload="loadTable()" onkeydown="keyPressed(event)" style="height:100%">
+
+    <div id="Header">
+        <div class="row">
+
+            <div class="col-md-2 col-xs-3"> <img src="warren_header.png" alt="Image No load" style="width: 200px; height: 75px"> </div>
+            <div class="col-md-3 col-xs-4"> <img src="warren_title.png" alt="Image No load" style="width: 250px; height: 75px"> </div>
+
+            <div class="col-md-6"> <img src="core_cash_coin.jpg" alt="Core Bank" style=" width: 250px; height: 75px; margin-left: auto; margin-right: auto;"> </div>
+        </div>
+    </div>
+
+    <ul id="navBar" style="height: 48px;">
+        <li><a onclick="awardClicked()" style=" font-size: 100%">Award</a></li>
+        <li><a onclick="redeemClicked()" style=" font-size: 100%">Redeem</a></li>
+        <li><a onclick="logOutClicked()" style=" font-size: 100%;float: right;">Log Out</a></li>
+    </ul>
+
+    <div id="SearchCriteria" >
+       <div > <label for="txtSearch">Search:</label>
+        <input type="text" oninput="loadTable()" id="txtSearch">
+        </div>
+
+        <div ><b>Grade:</b></div>
+
+        <div> All <input checked="true" id="GradeAll" type="radio" name="Grade" onclick="loadTable()"></div>
+
+        <div >5 <input id="Grade5" type="radio" name="Grade" onclick="loadTable()"></div>
+
+        <div >6 <input id="Grade6" type="radio" name="Grade" onclick="loadTable()"></div>
+
+        <div >7 <input id="Grade7" type="radio" name="Grade" onclick="loadTable()"></div>
+
+        <div >8 <input id="Grade8" type="radio" name="Grade" onclick="loadTable()"></div>
+
+        <div > <input type="button" onclick="loadTable();" value="Search"></div>
+    </div>
+
+
+    <b style="margin-left: 10px">Students:</b>
+    <br>
+
+<div class="row">
+    <div class="col-md-5 col-xs-12">
+    <div id="StudentTable">
+        <table id="Table" style="width: 550px;">
+            <tr id="HeaderRow">
+                <th>Name</th>
+                <th>Grade</th>
+                <th>Balance</th>
+            </tr>
+
+        </table>
+
+    </div>
+</div>
+    <div class="col-xs-2 col-md-1"></div>
+    <div id="StudentInfo"  >
+        <label id="StudentName">Name: </label><br><br>
+        <label id="StudentGrade">Grade: </label><br><br>
+        <label id="StudentBalance">Balance: </label><br><br>
+    </div>
+
+    </div>
+<div class="row">
+    <div class="col-md-3 col-xs-3" ></div>
+    <div id="AmountInfo" >
+        <input type="button" value="Add One CORE Cash" onclick="awardCoreCash()">
+    </div>
+    </div>
+
+</body>
+</html>
